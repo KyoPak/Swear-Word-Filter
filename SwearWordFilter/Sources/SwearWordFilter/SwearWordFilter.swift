@@ -7,7 +7,9 @@
 
 import Foundation
 
-/// User can Access thid Class.
+/// User can Access this Class.
+/// 'SwearWordFilter' is only public class in thid Library.
+
 public class SwearWordFilter {
     
     private let container: SwearWordsContainer

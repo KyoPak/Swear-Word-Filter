@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// 'DefaultSwearWordsContainer' is manage SwearWord Data using Trie Tree.
+
 protocol SwearWordsContainer {
     func insert(_ word: String)
     func remove(_ word: String)
@@ -16,8 +18,7 @@ protocol SwearWordsContainer {
 
 final class DefaultSwearWordsContainer: SwearWordsContainer {
     
-    let root = TrieNode()
-    
+    private let root = TrieNode()
     private var swearWords: Set<String> = []
     
     init() {
@@ -34,15 +35,14 @@ final class DefaultSwearWordsContainer: SwearWordsContainer {
             
             node = node.children[char] ?? TrieNode()
         }
+        
         node.isEndOfWord = true
         swearWords.insert(word)
     }
     
     func containsSwearWord(text: String) -> Bool {
-        var node = root
-        
         for i in 0..<text.count {
-            var currentNode = node
+            var currentNode = root
             var j = i
             while j < text.count, let childNode = currentNode.children[text[text.index(text.startIndex, offsetBy: j)]] {
                 currentNode = childNode
@@ -62,7 +62,7 @@ final class DefaultSwearWordsContainer: SwearWordsContainer {
         remove(root, word, index: word.startIndex)
         swearWords.remove(word)
     }
-
+    
     func getAllSwearWords() -> [String] {
         return Array(swearWords)
     }
