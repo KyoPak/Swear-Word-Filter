@@ -9,6 +9,8 @@ import Foundation
 
 protocol SwearWordsContainer {
     func insert(_ word: String)
+    func remove(_ word: String)
+    func getAllSwearWords() -> [String]
     func containsSwearWord(text: String) -> Bool
 }
 
@@ -16,8 +18,10 @@ final class DefaultSwearWordsContainer: SwearWordsContainer {
     
     let root = TrieNode()
     
+    private var swearWords: Set<String> = []
+    
     init() {
-        var words = (try? readTextFile()) ?? []
+        let words = (try? readTextFile()) ?? []
         words.forEach { insert($0) }
     }
     
@@ -31,6 +35,7 @@ final class DefaultSwearWordsContainer: SwearWordsContainer {
             node = node.children[char] ?? TrieNode()
         }
         node.isEndOfWord = true
+        swearWords.insert(word)
     }
     
     func containsSwearWord(text: String) -> Bool {
@@ -51,13 +56,34 @@ final class DefaultSwearWordsContainer: SwearWordsContainer {
         
         return false
     }
+    
+    func remove(_ word: String) {
+        guard swearWords.contains(word) else { return }
+        remove(root, word, index: word.startIndex)
+        swearWords.remove(word)
+    }
+
+    func getAllSwearWords() -> [String] {
+        return Array(swearWords)
+    }
+    
+    private func remove(_ node: TrieNode, _ word: String, index: String.Index) {
+        if index == word.endIndex {
+            node.isEndOfWord = false
+            return
+        }
+        
+        if let child = node.children[word[index]] {
+            remove(child, word, index: word.index(after: index))
+            
+            if !child.isEndOfWord && child.children.isEmpty {
+                node.children.removeValue(forKey: word[index])
+            }
+        }
+    }
 }
 
-enum FileError: Error {
-    case fileMissing
-    case fileReadInvalid
-}
-
+// MARK: Files Path
 extension DefaultSwearWordsContainer {
     private enum Files {
         static let swearWordList = "SwearWordList"
