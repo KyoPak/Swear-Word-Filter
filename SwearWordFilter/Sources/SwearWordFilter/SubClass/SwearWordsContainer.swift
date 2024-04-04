@@ -13,7 +13,8 @@ protocol SwearWordsContainer {
     func insert(_ word: String)
     func remove(_ word: String)
     func getAllSwearWords() -> [String]
-    func containsSwearWord(text: String) -> Bool
+    func containsSwearWordMedium(text: String) -> Bool
+    func containsSwearWordLong(text: String) -> Bool
 }
 
 final class DefaultSwearWordsContainer: SwearWordsContainer {
@@ -42,21 +43,30 @@ final class DefaultSwearWordsContainer: SwearWordsContainer {
         swearWords.insert(lowerWord)
     }
     
-    func containsSwearWord(text: String) -> Bool {
+    func containsSwearWordMedium(text: String) -> Bool {
         let lowerText = text.lowercased()
+        var currentNode = root
         
+
         for i in 0..<lowerText.count {
-            var currentNode = root
-            var j = i
-            while j < lowerText.count,
-                let childNode = currentNode.children[lowerText[lowerText.index(lowerText.startIndex, offsetBy: j)]] {
-                currentNode = childNode
-                if currentNode.isEndOfWord {
-                    return true
-                }
-                
-                j += 1
+            guard let childNode = currentNode.children[lowerText[lowerText.index(lowerText.startIndex, offsetBy: i)]] else {
+                currentNode = root
+                continue
             }
+            
+            currentNode = childNode
+            if currentNode.isEndOfWord {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    func containsSwearWordLong(text: String) -> Bool {
+        let lowerText = text.lowercased()
+        for swearWord in swearWords {
+            if lowerText.contains(swearWord) { return true }
         }
         
         return false

@@ -12,6 +12,11 @@ import Foundation
 
 public class SwearWordFilter {
     
+    public enum TextType {
+        case medium
+        case long
+    }
+    
     private let container: SwearWordsContainer
     
     /// Initializes the SwearWordFilter with a default container.
@@ -20,8 +25,13 @@ public class SwearWordFilter {
     }
     
     /// Check text contains swear word.
-    public func containSwearWord(_ text: String) -> Bool {
-        return container.containsSwearWord(text: text)
+    public func containSwearWord(_ text: String, type: TextType = .medium) -> Bool {
+        switch type {
+        case .medium:
+            return container.containsSwearWordMedium(text: text)
+        case .long:
+            return container.containsSwearWordLong(text: text)
+        }
     }
     
     /// Replace the swear word inside the text with a specific character.
