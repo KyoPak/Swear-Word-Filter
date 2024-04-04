@@ -17,8 +17,8 @@ final class SwearWordContainerTests: XCTestCase {
         container.insert(addLowerText)
         
         // then
-        XCTAssertTrue(container.containsSwearWord(text: addText))
-        XCTAssertTrue(container.containsSwearWord(text: addLowerText))
+        XCTAssertTrue(container.containsSwearWordMedium(text: addText))
+        XCTAssertTrue(container.containsSwearWordMedium(text: addLowerText))
     }
     
     // Test Constainer containsSwearWord(text:) Method
@@ -33,9 +33,9 @@ final class SwearWordContainerTests: XCTestCase {
         container.insert(addText)
         
         // then
-        XCTAssertTrue(container.containsSwearWord(text: addText))
-        XCTAssertTrue(container.containsSwearWord(text: addLowerText))
-        XCTAssertFalse(container.containsSwearWord(text: notSwearText))
+        XCTAssertTrue(container.containsSwearWordMedium(text: addText))
+        XCTAssertTrue(container.containsSwearWordMedium(text: addLowerText))
+        XCTAssertFalse(container.containsSwearWordMedium(text: notSwearText))
     }
     
     /// This test code can be checked to see if the swear word is partially included.
@@ -48,8 +48,8 @@ final class SwearWordContainerTests: XCTestCase {
         container.insert(addText)
         
         // then
-        XCTAssertTrue(container.containsSwearWord(text: addText))
-        XCTAssertTrue(container.containsSwearWord(text: expectSwearText))
+        XCTAssertTrue(container.containsSwearWordMedium(text: addText))
+        XCTAssertTrue(container.containsSwearWordMedium(text: expectSwearText))
     }
     
     // Test Constainer remove(_:) Method
@@ -60,11 +60,11 @@ final class SwearWordContainerTests: XCTestCase {
         container.insert(addText)
         
         // when
-        XCTAssertTrue(container.containsSwearWord(text: addText))
+        XCTAssertTrue(container.containsSwearWordMedium(text: addText))
         container.remove(addText)
         
         // then
-        XCTAssertFalse(container.containsSwearWord(text: addText))
+        XCTAssertFalse(container.containsSwearWordMedium(text: addText))
     }
     
     func test_current_SwearWordCount() {
@@ -79,5 +79,31 @@ final class SwearWordContainerTests: XCTestCase {
         // then
         let afterCount = container.getAllSwearWords().count
         XCTAssertEqual(afterCount - originCount, 2)
+    }
+    
+    func test_containsSwearWord_Time_instrument() {
+        // given
+        let alpha = String(repeating: "KYABCDEFG", count: 200)
+        
+        let addText = alpha + "KYO"
+        
+        // when
+        container.insert("KYO")
+        
+        // then
+        XCTAssertTrue(container.containsSwearWordMedium(text: addText))
+    }
+    
+    func test_containsSwearWord_Time_Direct_instrument() {
+        // given
+        let alpha = String(repeating: "KYABCDEFG", count: 200)
+        
+        let addText = alpha + "KYO"
+        
+        // when
+        container.insert("KYO")
+        
+        // then
+        XCTAssertTrue(container.containsSwearWordLong(text: addText))
     }
 }
