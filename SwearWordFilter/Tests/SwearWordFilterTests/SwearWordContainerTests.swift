@@ -8,10 +8,17 @@ final class SwearWordContainerTests: XCTestCase {
     /// This test code checks the logic of the insert method.
 
     func test_insert() {
+        // given
         let addText = "KYO"
-        container.insert(addText)
+        let addLowerText = "kyo"
         
-        XCTAssertTrue(container.getAllSwearWords().contains(addText))
+        // when
+        container.insert(addText)
+        container.insert(addLowerText)
+        
+        // then
+        XCTAssertTrue(container.containsSwearWord(text: addText))
+        XCTAssertTrue(container.containsSwearWord(text: addLowerText))
     }
     
     // Test Constainer containsSwearWord(text:) Method
@@ -19,13 +26,15 @@ final class SwearWordContainerTests: XCTestCase {
     func test_containsSwearWord() {
         // given
         let addText = "KYO"
+        let addLowerText = "kyo"
         let notSwearText = "iOS"
         
         // when
         container.insert(addText)
         
         // then
-        XCTAssertTrue(container.containsSwearWord(text: "씨발"))
+        XCTAssertTrue(container.containsSwearWord(text: addText))
+        XCTAssertTrue(container.containsSwearWord(text: addLowerText))
         XCTAssertFalse(container.containsSwearWord(text: notSwearText))
     }
     
