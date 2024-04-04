@@ -27,8 +27,10 @@ final class DefaultSwearWordsContainer: SwearWordsContainer {
     }
     
     func insert(_ word: String) {
+        let lowerWord = word.lowercased()
+        
         var node = root
-        for char in word {
+        for char in lowerWord {
             if node.children[char] == nil {
                 node.children[char] = TrieNode()
             }
@@ -37,14 +39,17 @@ final class DefaultSwearWordsContainer: SwearWordsContainer {
         }
         
         node.isEndOfWord = true
-        swearWords.insert(word)
+        swearWords.insert(lowerWord)
     }
     
     func containsSwearWord(text: String) -> Bool {
-        for i in 0..<text.count {
+        let lowerText = text.lowercased()
+        
+        for i in 0..<lowerText.count {
             var currentNode = root
             var j = i
-            while j < text.count, let childNode = currentNode.children[text[text.index(text.startIndex, offsetBy: j)]] {
+            while j < lowerText.count,
+                let childNode = currentNode.children[lowerText[lowerText.index(lowerText.startIndex, offsetBy: j)]] {
                 currentNode = childNode
                 if currentNode.isEndOfWord {
                     return true
@@ -58,9 +63,11 @@ final class DefaultSwearWordsContainer: SwearWordsContainer {
     }
     
     func remove(_ word: String) {
-        guard swearWords.contains(word) else { return }
-        remove(root, word, index: word.startIndex)
-        swearWords.remove(word)
+        let lowerText = word.lowercased()
+        
+        guard swearWords.contains(lowerText) else { return }
+        remove(root, lowerText, index: lowerText.startIndex)
+        swearWords.remove(lowerText)
     }
     
     func getAllSwearWords() -> [String] {
