@@ -26,23 +26,14 @@ public class SwearWordFilter {
     
     /// Replace the swear word inside the text with a specific character.
     public func replaceSwearWord(_ text: String, withChar replaceCharacter: Character = "*") -> String {
-        var filteredText = text
+        var filteredText = text.lowercased()
+        
         container.getAllSwearWords().forEach { swearWord in
             let replaceText = String(repeating: replaceCharacter, count: swearWord.count)
             filteredText = filteredText.replacingOccurrences(of: swearWord, with: replaceText)
         }
         
-        return filteredText
-    }
-    
-    /// Replace the swear word inside the text with a specific text.
-    public func replaceSwearWord(_ text: String, withString replaceText: String) -> String {
-        var filteredText = text
-        container.getAllSwearWords().forEach { swearWord in
-            filteredText = filteredText.replacingOccurrences(of: swearWord, with: replaceText)
-        }
-        
-        return filteredText
+        return syncOriginText(filteredText, text, replaceCharacter: replaceCharacter)
     }
     
     /// Add text in Origin swear word list.
@@ -63,5 +54,29 @@ public class SwearWordFilter {
     /// Remove texts in Origin swear word list.
     public func removeSwearWord(_ texts: [String]) {
         texts.forEach { container.remove($0) }
+    }
+}
+
+extension SwearWordFilter {
+    /* Replace Text sync Origin Text
+        If replaceCharacter is "#", swear word is iO,
+        Origin Text : "Hello iO", Filter Text : "hello ##"
+        Return "Hello ##"
+    */
+    
+    private func syncOriginText(_ filterText: String, _ originText: String, replaceCharacter: Character) -> String {
+        let originTexts = originText.map { String($0) }
+        let filterTexts = filterText.map { String($0) }
+        
+        var syncText: [String] = []
+        
+        guard originTexts.count == filterTexts.count else { return filterText }
+        
+        for index in 0..<originTexts.count {
+            let syncChar = filterTexts[index] != String(replaceCharacter) ? originTexts[index] : filterTexts[index]
+            syncText.append(String(syncChar))
+        }
+        
+        return syncText.joined()
     }
 }
