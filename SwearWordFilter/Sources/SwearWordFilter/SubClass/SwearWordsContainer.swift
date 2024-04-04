@@ -47,9 +47,9 @@ final class DefaultSwearWordsContainer: SwearWordsContainer {
         let lowerText = text.lowercased()
         var currentNode = root
         
-
-        for i in 0..<lowerText.count {
-            guard let childNode = currentNode.children[lowerText[lowerText.index(lowerText.startIndex, offsetBy: i)]] else {
+        for index in 0..<lowerText.count {
+            let textIndex = lowerText.index(lowerText.startIndex, offsetBy: index)
+            guard let childNode = currentNode.children[lowerText[textIndex]] else {
                 currentNode = root
                 continue
             }
