@@ -24,7 +24,6 @@ final class DefaultSwearWordsContainer: SwearWordsContainer {
     
     init() {
         let words = (try? readTextFile()) ?? []
-        print(words)
         words.forEach { insert($0) }
     }
     
