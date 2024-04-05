@@ -13,8 +13,8 @@ protocol SwearWordsContainer {
     func insert(_ word: String)
     func remove(_ word: String)
     func getAllSwearWords() -> [String]
-    func containsSwearWordMedium(text: String) -> Bool
-    func containsSwearWordLong(text: String) -> Bool
+    func containsSwearWordTrieTree(text: String) -> Bool
+    func containsSwearWordDirect(text: String) -> Bool
 }
 
 final class DefaultSwearWordsContainer: SwearWordsContainer {
@@ -43,27 +43,34 @@ final class DefaultSwearWordsContainer: SwearWordsContainer {
         swearWords.insert(lowerWord)
     }
     
-    func containsSwearWordMedium(text: String) -> Bool {
+    func containsSwearWordTrieTree(text: String) -> Bool {
         let lowerText = text.lowercased()
         var currentNode = root
         
-        for index in 0..<lowerText.count {
-            let textIndex = lowerText.index(lowerText.startIndex, offsetBy: index)
-            guard let childNode = currentNode.children[lowerText[textIndex]] else {
-                currentNode = root
-                continue
-            }
+        var index = lowerText.startIndex
+        while index < lowerText.endIndex {
+            let char = lowerText[index]
             
-            currentNode = childNode
-            if currentNode.isEndOfWord {
-                return true
+            /// if currentNode's childNode is Swear Charactor
+            if let childNode = currentNode.children[char] {
+                currentNode = childNode
+                if currentNode.isEndOfWord { return true }
+                
+                index = lowerText.index(after: index)
+            } else {
+                if currentNode !== root {
+                    currentNode = root
+                } else {
+                    /// If it does not match on the root node, move to the next letter.
+                    index = lowerText.index(after: index)
+                }
             }
         }
         
         return false
     }
-    
-    func containsSwearWordLong(text: String) -> Bool {
+
+    func containsSwearWordDirect(text: String) -> Bool {
         let lowerText = text.lowercased()
         for swearWord in swearWords {
             if lowerText.contains(swearWord) { return true }
