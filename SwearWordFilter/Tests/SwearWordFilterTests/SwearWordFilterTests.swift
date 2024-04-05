@@ -24,11 +24,11 @@ final class SwearWordFilterTests: XCTestCase {
     /// This test code checks the logic of the replace text mehod
     func test_replaceSwearWord() {
         // given
-        let replaceText = "Hello KYO"
+        let replaceText = "Hello KYO KY"
         let replaceCharactor: Character = "*"
         
         let addSwearWord = "KYO"
-        let expectResult = "Hello ***"
+        let expectResult = "Hello *** KY"
         
         // when
         filterSW.addSwearWord(addSwearWord)

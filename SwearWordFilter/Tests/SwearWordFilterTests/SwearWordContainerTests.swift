@@ -17,8 +17,8 @@ final class SwearWordContainerTests: XCTestCase {
         container.insert(addLowerText)
         
         // then
-        XCTAssertTrue(container.containsSwearWordMedium(text: addText))
-        XCTAssertTrue(container.containsSwearWordMedium(text: addLowerText))
+        XCTAssertTrue(container.containsSwearWordTrieTree(text: addText))
+        XCTAssertTrue(container.containsSwearWordTrieTree(text: addLowerText))
     }
     
     // Test Constainer containsSwearWord(text:) Method
@@ -33,23 +33,23 @@ final class SwearWordContainerTests: XCTestCase {
         container.insert(addText)
         
         // then
-        XCTAssertTrue(container.containsSwearWordMedium(text: addText))
-        XCTAssertTrue(container.containsSwearWordMedium(text: addLowerText))
-        XCTAssertFalse(container.containsSwearWordMedium(text: notSwearText))
+        XCTAssertTrue(container.containsSwearWordTrieTree(text: addText))
+        XCTAssertTrue(container.containsSwearWordTrieTree(text: addLowerText))
+        XCTAssertFalse(container.containsSwearWordTrieTree(text: notSwearText))
     }
     
     /// This test code can be checked to see if the swear word is partially included.
     func test_containsSwearWord_Text_contain_SwearWord() {
         // ginve
         let addText = "KYO"
-        let expectSwearText = "KYO iOS"
+        let expectSwearText = "KKKYOKKK iOS"
         
         // when
         container.insert(addText)
         
         // then
-        XCTAssertTrue(container.containsSwearWordMedium(text: addText))
-        XCTAssertTrue(container.containsSwearWordMedium(text: expectSwearText))
+        XCTAssertTrue(container.containsSwearWordTrieTree(text: addText))
+        XCTAssertTrue(container.containsSwearWordTrieTree(text: expectSwearText))
     }
     
     // Test Constainer remove(_:) Method
@@ -60,11 +60,11 @@ final class SwearWordContainerTests: XCTestCase {
         container.insert(addText)
         
         // when
-        XCTAssertTrue(container.containsSwearWordMedium(text: addText))
+        XCTAssertTrue(container.containsSwearWordTrieTree(text: addText))
         container.remove(addText)
         
         // then
-        XCTAssertFalse(container.containsSwearWordMedium(text: addText))
+        XCTAssertFalse(container.containsSwearWordTrieTree(text: addText))
     }
     
     func test_current_SwearWordCount() {
@@ -83,27 +83,27 @@ final class SwearWordContainerTests: XCTestCase {
     
     func test_containsSwearWord_Time_instrument() {
         // given
-        let alpha = String(repeating: "KYABCDEFG", count: 200)
+        let alpha = String(repeating: "KYABCDEFGE", count: 1000000)
         
-        let addText = alpha + "KYO"
+        let addText = alpha + "KYO" + alpha
         
         // when
         container.insert("KYO")
         
         // then
-        XCTAssertTrue(container.containsSwearWordMedium(text: addText))
+        XCTAssertTrue(container.containsSwearWordTrieTree(text: addText))
     }
     
     func test_containsSwearWord_Time_Direct_instrument() {
         // given
-        let alpha = String(repeating: "KYABCDEFG", count: 200)
+        let alpha = String(repeating: "KYABCDEFGE", count: 1000000)
         
-        let addText = alpha + "KYO"
+        let addText = alpha + "KYO" + alpha
         
         // when
         container.insert("KYO")
         
         // then
-        XCTAssertTrue(container.containsSwearWordLong(text: addText))
+        XCTAssertTrue(container.containsSwearWordDirect(text: addText))
     }
 }
